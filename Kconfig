@@ -1,0 +1,63 @@
+# Copyright (c) 2025 Nuvoton Technology Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+config NVT_ML_HYPERRAM
+	bool
+
+config NVT_ML_REQUIRES_HYPERRAM
+	bool
+	select NVT_ML_HYPERRAM
+
+config NVT_ML_HYPERRAM_TENSOR_ARENA
+	bool "Allocate TFLM tensor arena in HyperRAM"
+	select NVT_ML_REQUIRES_HYPERRAM
+
+config NVT_ML_REQUIRES_ETHOS_U
+	bool
+	select ETHOS_U
+
+config NVT_ML_ETHOS_U_PROFILE
+	bool "Enable Ethos-U profiling"
+	depends on NVT_ML_REQUIRES_ETHOS_U
+	help
+	  Enable Ethos-U profiling
+
+config NVT_ML_TFLM_TENSOR_ARENA_SIZE
+	int "TFLM tensor arena size"
+	default 0x130000
+	help
+	  Define TFLM tensor arena size
+
+choice NVT_ML_OD_INPUT_CHOICE
+	prompt "Choose ML object detection input source"
+	default NVT_ML_OD_INPUT_CCAP if BOARD_NUMAKER_M55M1
+
+config NVT_ML_OD_INPUT_CCAP
+	bool "CCAP as OD input"
+	help
+	  Use camera as object detection input
+
+config NVT_ML_OD_INPUT_IMAGE_BLOB
+	bool "Image blob as OD input"
+	help
+	  Use embedded image blob as object detection input
+
+endchoice
+
+choice NVT_ML_OD_MODEL_CHOICE
+	prompt "Choose ML object detection model"
+	default NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_VELA_256
+
+config NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_VELA_256
+	bool "YOLO-Fastest object detection model, INT8, vela-compiled for 256 MAC"
+	select NVT_ML_REQUIRES_ETHOS_U
+
+endchoice
+
+config NVT_ML_OD_OUTPUT_DISPLAY
+	bool "Display as OD output"
+	default y if BOARD_NUMAKER_M55M1
+	help
+	  Use display as object detection output
+
+source "Kconfig.zephyr"
