@@ -1,0 +1,62 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+#include <zephyr/dt-bindings/memory-attr/memory-attr-arm.h>
+
+&npu0 {
+	status = "okay";
+};
+
+/* HyperRAM */
+&gpiog {
+	status = "okay";
+};
+&gpioh {
+	status = "okay";
+};
+&gpioj {
+	status = "okay";
+};
+
+/* CCAP */
+&gpiod {
+	status = "okay";
+};
+&gpiog {
+	status = "okay";
+};
+&gpiof {
+	status = "okay";
+};
+
+/* EBI LCD panel */
+&gpioa {
+	status = "okay";
+};
+&gpioc {
+	status = "okay";
+};
+&gpiod {
+	status = "okay";
+};
+&gpioe {
+	status = "okay";
+};
+&gpiog {
+	status = "okay";
+};
+&gpioh {
+	status = "okay";
+};
+&gpioj {
+	status = "okay";
+};
+
+/ {
+	hyperram: hyperram@82000000 {
+		compatible = "zephyr,memory-region", "mmio-sram";
+		reg = <0x82000000 0x800000>;
+		zephyr,memory-region = "HYPERRAM";
+		zephyr,memory-attr = <DT_MEM_ARM(ATTR_MPU_RAM)>;
+		status = "okay";
+	};
+};

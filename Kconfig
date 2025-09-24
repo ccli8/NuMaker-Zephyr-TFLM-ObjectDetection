@@ -1,0 +1,78 @@
+# Copyright (c) 2025 Nuvoton Technology Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+config NVT_ML_HYPERRAM
+	bool
+
+config NVT_ML_REQUIRES_HYPERRAM
+	bool
+	select NVT_ML_HYPERRAM
+
+config NVT_ML_HYPERRAM_TENSOR_ARENA
+	bool "Allocate TFLM tensor arena in HyperRAM"
+	select NVT_ML_REQUIRES_HYPERRAM
+
+config NVT_ML_REQUIRES_ETHOS_U
+	bool
+	select ETHOS_U
+
+config NVT_ML_ETHOS_U_PROFILE
+	bool "Enable Ethos-U profiling"
+	depends on NVT_ML_REQUIRES_ETHOS_U
+	help
+	  Enable Ethos-U profiling
+
+config NVT_ML_TFLM_TENSOR_ARENA_SIZE
+	int "TFLM tensor arena size"
+	default 9500000 if NVT_ML_OD_MODEL_YOLO_FASTEST_INT8
+	default 900000 if NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SIZE
+	default 1300000 if NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SPEED
+	help
+	  Define TFLM tensor arena size
+
+choice NVT_ML_OD_INPUT_CHOICE
+	prompt "Choose ML object detection input source"
+	default NVT_ML_OD_INPUT_IMAGE_BLOB
+
+config NVT_ML_OD_INPUT_CCAP
+	bool "CCAP as OD input"
+	help
+	  Use camera as object detection input
+
+config NVT_ML_OD_INPUT_IMAGE_BLOB
+	bool "Image blob as OD input"
+	help
+	  Use embedded image blob as object detection input
+
+endchoice
+
+choice NVT_ML_OD_MODEL_CHOICE
+	prompt "Choose ML object detection model"
+	default NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SIZE if SOC_SERIES_M55M1X
+	default NVT_ML_OD_MODEL_YOLO_FASTEST_INT8
+
+config NVT_ML_OD_MODEL_YOLO_FASTEST_INT8
+	bool "YOLO-Fastest object detection model, INT8, non-vela-compiled"
+
+config NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SIZE
+	bool "YOLO-Fastest object detection model, INT8, vela-compiled for Ethos-U55/256 MAC, optimized for size"
+	select NVT_ML_REQUIRES_ETHOS_U
+
+config NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SPEED
+	bool "YOLO-Fastest object detection model, INT8, vela-compiled for Ethos-U55/256 MAC, optimized for performance"
+	select NVT_ML_REQUIRES_ETHOS_U
+
+endchoice
+
+config NVT_ML_OD_OUTPUT_DISPLAY
+	bool "Display as OD output"
+	help
+	  Use display as object detection output
+
+config NVT_ML_OD_INFERENCE_THREAD_STACK_SIZE
+	int "OD inference thread stack size"
+	default 2048
+	help
+	  Size of the stack for the object detection inference thread
+
+source "Kconfig.zephyr"
