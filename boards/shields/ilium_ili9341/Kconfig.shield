@@ -1,0 +1,5 @@
+# Copyright (c) 2025 Nuvoton Technology Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+config SHIELD_ILIUM_ILI9341
+	def_bool $(shields_list_contains,ilium_ili9341)

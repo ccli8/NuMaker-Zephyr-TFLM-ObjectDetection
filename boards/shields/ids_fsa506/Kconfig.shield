@@ -1,0 +1,5 @@
+# Copyright (c) 2025 Nuvoton Technology Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+config SHIELD_IDS_FSA506
+	def_bool $(shields_list_contains,ids_fsa506)

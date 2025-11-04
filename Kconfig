@@ -1,0 +1,127 @@
+# Copyright (c) 2025 Nuvoton Technology Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+config NVT_ML_HYPERRAM
+	bool
+
+config NVT_ML_REQUIRES_HYPERRAM
+	bool
+	select NVT_ML_HYPERRAM
+
+config NVT_ML_HYPERRAM_TENSOR_ARENA
+	bool "Allocate TFLM tensor arena in HyperRAM"
+	depends on SHIELD_WINBOND_HYPERRAM
+	select NVT_ML_REQUIRES_HYPERRAM
+
+config NVT_ML_REQUIRES_ETHOS_U
+	bool
+	select ETHOS_U
+
+config NVT_ML_ETHOS_U_PROFILE
+	bool "Enable Ethos-U profiling"
+	depends on NVT_ML_REQUIRES_ETHOS_U
+	help
+	  Enable Ethos-U profiling
+
+config NVT_ML_TFLM_TENSOR_ARENA_SIZE
+	int "TFLM tensor arena size"
+	default 9500000 if NVT_ML_OD_MODEL_YOLO_FASTEST_INT8
+	default 900000 if NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SIZE
+	default 1300000 if NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SPEED
+	help
+	  Define TFLM tensor arena size
+
+config NVT_ML_OD_INPUT_CCAP
+	bool
+
+choice NVT_ML_OD_INPUT_CHOICE
+	prompt "Choose ML object detection input source"
+	default NVT_ML_OD_INPUT_SENSOR_HM1055 if SHIELD_HIMAX_HM1055
+	default NVT_ML_OD_INPUT_IMAGE_BLOB
+
+config NVT_ML_OD_INPUT_SENSOR_HM1055
+	bool "HM1055 as OD input"
+	depends on SHIELD_HIMAX_HM1055
+	select NVT_ML_OD_INPUT_CCAP
+	help
+	  Use CMOS image sensor HM1055 as object detection input
+
+config NVT_ML_OD_INPUT_IMAGE_BLOB
+	bool "Image blob as OD input"
+	help
+	  Use embedded image blob as object detection input
+
+endchoice
+
+choice NVT_ML_OD_MODEL_CHOICE
+	prompt "Choose ML object detection model"
+	default NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SIZE if SOC_SERIES_M55M1X
+	default NVT_ML_OD_MODEL_YOLO_FASTEST_INT8
+
+config NVT_ML_OD_MODEL_YOLO_FASTEST_INT8
+	bool "YOLO-Fastest OD model, no vela-compile"
+	help
+	  Use YOLO-Fastest object detection model, type INT8,
+	  no vela-compile
+
+config NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SIZE
+	bool "YOLO-Fastest OD model, vela-compile for size"
+	select NVT_ML_REQUIRES_ETHOS_U
+	help
+	  Use YOLO-Fastest object detection model, type INT8,
+	  vela-compile for Ethos-U55/256 MAC, optimize for size
+
+config NVT_ML_OD_MODEL_YOLO_FASTEST_INT8_ETHOS_U55_256_SPEED
+	bool "YOLO-Fastest OD model, vela-compile for speed"
+	select NVT_ML_REQUIRES_ETHOS_U
+	help
+	  Use YOLO-Fastest object detection model, type INT8,
+	  vela-compile for Ethos-U55/256 MAC, optimize for speed
+
+endchoice
+
+config NVT_ML_OD_OUTPUT_DISPLAY
+	bool
+
+choice NVT_ML_OD_OUTPUT_DISPLAY_CHOICE
+	bool "Choose display as OD output"
+	default NVT_ML_OD_OUTPUT_DISPLAY_LCD_FSA506 if SHIELD_IDS_FSA506
+	default NVT_ML_OD_OUTPUT_DISPLAY_LCD_ILI9341 if SHIELD_ILIUM_ILI9341
+	default NVT_ML_OD_OUTPUT_DISPLAY_LCD_LT7381 if SHIELD_LEVETOP_LT7381
+	default NVT_ML_OD_OUTPUT_DISPLAY_NONE
+
+config NVT_ML_OD_OUTPUT_DISPLAY_LCD_FSA506
+	bool "FSA506 as OD output"
+	depends on SHIELD_IDS_FSA506
+	select NVT_ML_OD_OUTPUT_DISPLAY
+	help
+	  Use LCD FSA506 as object detection output over EBI
+
+config NVT_ML_OD_OUTPUT_DISPLAY_LCD_ILI9341
+	bool "ILI9341 as OD output"
+	depends on SHIELD_ILIUM_ILI9341
+	select NVT_ML_OD_OUTPUT_DISPLAY
+	help
+	  Use LCD ILI9341 as object detection output over SPI
+
+config NVT_ML_OD_OUTPUT_DISPLAY_LCD_LT7381
+	bool "LT7381 as OD output"
+	depends on SHIELD_LEVETOP_LT7381
+	select NVT_ML_OD_OUTPUT_DISPLAY
+	help
+	  Use LCD LT7381 as object detection output over EBI
+
+config NVT_ML_OD_OUTPUT_DISPLAY_NONE
+	bool "No display as OD output"
+	help
+	  Use no display as object detection output
+
+endchoice
+
+config NVT_ML_OD_INFERENCE_THREAD_STACK_SIZE
+	int "OD inference thread stack size"
+	default 2048
+	help
+	  Size of the stack for the object detection inference thread
+
+source "Kconfig.zephyr"

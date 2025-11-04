@@ -1,0 +1,36 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+#include <zephyr/dt-bindings/memory-attr/memory-attr-arm.h>
+
+/* EBI LCD panel */
+&gpioa {
+	status = "okay";
+};
+&gpioc {
+	status = "okay";
+};
+&gpiod {
+	status = "okay";
+};
+&gpioe {
+	status = "okay";
+};
+&gpiog {
+	status = "okay";
+};
+&gpioh {
+	status = "okay";
+};
+&gpioj {
+	status = "okay";
+};
+
+/ {
+	ebi_lcd: ebi_lcd@60000000 {
+		compatible = "zephyr,memory-region";
+		reg = <0x60000000 0x100000>;
+		zephyr,memory-region = "EBI_LCD";
+		zephyr,memory-attr = <DT_MEM_ARM(ATTR_MPU_DEVICE)>;
+		status = "okay";
+	};
+};

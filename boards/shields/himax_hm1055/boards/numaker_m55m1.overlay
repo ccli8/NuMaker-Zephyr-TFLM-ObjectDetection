@@ -1,0 +1,12 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+/* CCAP */
+&gpiod {
+	status = "okay";
+};
+&gpiog {
+	status = "okay";
+};
+&gpiof {
+	status = "okay";
+};

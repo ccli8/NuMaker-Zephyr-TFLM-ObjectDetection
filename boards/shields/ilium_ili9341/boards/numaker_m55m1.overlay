@@ -1,0 +1,43 @@
+/* SPDX-License-Identifier: Apache-2.0 */
+
+&pinctrl {
+	spi2_default: spi2_default {
+		group0 {
+			pinmux = <PA8MFP_SPI2_MOSI>,
+				 <PA9MFP_SPI2_MISO>;
+			slew-rate = "fast";
+		};
+
+		group1 {
+			pinmux = <PA10MFP_SPI2_CLK>;
+			input-schmitt-enable;
+			slew-rate = "fast";
+		};
+	};
+};
+
+&spi2 {
+	status = "okay";
+
+	clock-frequency = <60000000>;
+	cs-gpios = <&gpioa 11 GPIO_ACTIVE_LOW>;
+
+	pinctrl-0 = <&spi2_default>;
+	pinctrl-names = "default";
+
+	ilium_ili9341: spi-device@0 {
+		status = "okay";
+
+		reg = <0>;
+
+		gpios = <&gpiob 5 0>, <&gpiob 2 0>, <&gpiob 3 0>, <&gpioa 11 0>;
+		gpio-names = "backlight", "dc", "reset", "spi-ss";
+	};
+};
+
+&gpioa {
+	status = "okay";
+};
+&gpiob {
+	status = "okay";
+};

@@ -1,0 +1,4 @@
+shields:
+  - name: himax_hm1055
+    full_name: Himax image sensor HM1055
+    vendor: Himax Technologies

@@ -1,0 +1,5 @@
+# Copyright (c) 2025 Nuvoton Technology Corporation
+# SPDX-License-Identifier: Apache-2.0
+
+config SHIELD_WINBOND_HYPERRAM
+	def_bool $(shields_list_contains,winbond_hyperram)
