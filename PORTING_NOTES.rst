@@ -52,6 +52,8 @@ Notes on porting from BSP to Zephyr
    (2) Remove GCC/IAR/KEIL IDE projects and their build artifacts (*.a/*.lib)
    (3) Port mutex onto zephyr (N/A)
    (4) Remove unnecessary sensors/ from build (N/A)
+   (5) Patch imlib_nvt.c by pre-V3.01.005 to adjust '__GNUC__' conditional for
+       different GCC versions
 
 9. Use shell instead of unsupported getchar
    Add shell commands "od <subcommand>" for object detection record control
